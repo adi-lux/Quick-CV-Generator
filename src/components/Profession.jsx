@@ -4,9 +4,10 @@ class Profession extends React.Component {
 	constructor() {
 		super();
 	}
+	// conditional rendering -> if saved or not, input vs paragraph
 
 	render() {
-		return <div>dsadsa</div>;
+		return <div></div>;
 	}
 }
 

@@ -1,3 +1,51 @@
+$beige: #e3e7d3;
+$silver-sand: #bdc2bf;
+$spanish-gray: #939c94;
+$pine-tree: #25291c;
+$green-yellow: #e6e49f;
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: $beige;
+}
 header {
 	text-align: center;
+}
+
+.education-list {
+	.education-part {
+		display: grid;
+		row-gap: 1vh;
+	}
+	h1 {
+		text-align: center;
+	}
+}
+.introduction,
+.education {
+	padding: 0 20vw;
+	display: grid;
+	grid-template-columns: 110px 1fr;
+	grid-template-rows: repeat(5, 1fr);
+	row-gap: 1vh;
+	align-items: center;
+
+	label {
+		font-weight: bold;
+	}
+	p,
+	input {
+		margin: 0;
+		padding: 0;
+	}
+	#saved,
+	.education-button {
+		justify-self: stretch;
+		grid-column: 1 / 3;
+	}
 }
