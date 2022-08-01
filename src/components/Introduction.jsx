@@ -5,6 +5,8 @@ class Introduction extends React.Component {
 		super(props);
 		this.handleChange = this.handleChange.bind(this);
 		this.toggleMode = this.toggleMode.bind(this);
+		this.returnUnsaved = this.returnUnsaved.bind(this);
+		this.returnSaved = this.returnSaved.bind(this);
 	}
 	// conditional rendering -> if saved or not, input vs paragraph
 	// 		firstName: '',
@@ -77,14 +79,14 @@ class Introduction extends React.Component {
 		return (
 			<section className='introduction'>
 				<label htmlFor='first-name'>First Name</label>
-				<input id='firstName' value={firstName} disabled readonly />
+				<input id='firstName' value={firstName} disabled readOnly />
 				<label htmlFor='last-name'>Last Name</label>
 
-				<input id='lastName' value={lastName} disabled readonly />
+				<input id='lastName' value={lastName} disabled readOnly />
 				<label htmlFor='email'>Email</label>
-				<input id='email' value={email} disabled readonly />
+				<input id='email' value={email} disabled readOnly />
 				<label htmlFor='number'>Phone Number</label>
-				<input id='number' value={number} disabled readonly />
+				<input id='number' value={number} disabled readOnly />
 				<input
 					type='button'
 					name='saved'
@@ -95,10 +97,22 @@ class Introduction extends React.Component {
 			</section>
 		);
 	}
+	returnCompleted() {
+		const { firstName, lastName, email, number } = this.props;
+		return (
+			<div className='complete-introduction'>
+				<h1 className='complete-name'>{firstName} {lastName}</h1>
+				<h2 className='complete-info'>{email} | {number}</h2>
+			</div>
+		);
+	}
 	render() {
-		const { saved } = this.props;
-
-		return saved ? this.returnSaved() : this.returnUnsaved();
+		const { saved, complete } = this.props;
+		return complete
+			? this.returnCompleted()
+			: saved
+			? this.returnSaved()
+			: this.returnUnsaved();
 	}
 }
 

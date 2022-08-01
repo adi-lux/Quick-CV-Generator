@@ -6,6 +6,7 @@ class Profession extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.toggleMode = this.toggleMode.bind(this);
 		this.deleteItem = this.deleteItem.bind(this);
+		this.returnCompleted = this.returnCompleted.bind(this);
 	}
 
 	handleChange(e) {
@@ -102,11 +103,26 @@ class Profession extends React.Component {
 			</form>
 		);
 	}
-
+	returnCompleted() {
+		const { company, title, description, startTime, endTime } = this.props;
+		return (
+			<div className='complete-profession'>
+				<h1 className='complete-company'>{company}</h1>
+				<h2 className='prof-title'>{title}</h2>
+				<h3 className='prof-timespan'>
+					{startTime} - {endTime}
+				</h3>
+				<p className='description'>{description}</p>
+			</div>
+		);
+	}
 	render() {
-		const { saved } = this.props;
-
-		return saved ? this.returnSaved() : this.returnUnsaved();
+		const { saved, complete } = this.props;
+		return complete
+			? this.returnCompleted()
+			: saved
+			? this.returnSaved()
+			: this.returnUnsaved();
 	}
 }
 

@@ -50,6 +50,9 @@ class App extends React.Component {
 		this.handleProfession = this.handleProfession.bind(this);
 		this.handleProfessionInput = this.handleProfessionInput.bind(this);
 		this.deleteProfession = this.deleteProfession.bind(this);
+		this.toggleSubmit = this.toggleSubmit.bind(this);
+		this.returnComplete = this.returnComplete.bind(this);
+		this.returnIncomplete = this.returnIncomplete.bind(this);
 	}
 
 	handleIntroButton(e) {
@@ -100,6 +103,7 @@ class App extends React.Component {
 				toggleSave={this.handleAddingEducation}
 				saved={mode}
 				delete={this.deleteEducation}
+				complete={this.state.submitted}
 			/>
 		);
 
@@ -190,6 +194,7 @@ class App extends React.Component {
 				toggleSave={this.handleAddingProfession}
 				saved={mode}
 				delete={this.deleteProfession}
+				complete={this.state.submitted}
 			/>
 		);
 
@@ -255,13 +260,72 @@ class App extends React.Component {
 		});
 	}
 
-	toggleSubmit() {}
+	toggleSubmit() {
+		this.setState({
+			...this.state,
+			submitted: !this.state.submitted,
+		});
+	}
 
-	returnComplete() {}
+	returnComplete() {
+		const { firstName, lastName, email, number, saved } =
+			this.state.currentIntroduction;
 
-	returnIncomplete() {}
+		const { educationList, professionList } = this.state;
 
-	render() {
+		const completeEducation = educationList.map((item) => {
+			return (
+				<Education
+					key={item.key}
+					id={item.key}
+					schoolName={item.props.schoolName}
+					subject={item.props.subject}
+					startTime={item.props.startTime}
+					gradTime={item.props.gradTime}
+					complete={this.state.submitted}
+				/>
+			);
+		});
+
+		const completeProfession = professionList.map((item) => {
+			return (
+				<Profession
+					key={item.key}
+					id={item.key}
+					company={item.props.company}
+					title={item.props.title}
+					description={item.props.description}
+					startTime={item.props.startTime}
+					endTime={item.props.endTime}
+					complete={this.state.submitted}
+				/>
+			);
+		});
+		return (
+			<div className='resume'>
+				<Header />
+				<Introduction
+					firstName={firstName}
+					lastName={lastName}
+					email={email}
+					number={number}
+					saved={saved}
+					complete={this.state.submitted}
+				/>
+				<section className='education-list'>
+					{completeEducation}
+				</section>
+				<section className='profession-list'>
+					{completeProfession}
+				</section>
+				<button className='generate-button' onClick={this.toggleSubmit}>
+					Previous
+				</button>
+			</div>
+		);
+	}
+
+	returnIncomplete() {
 		const { firstName, lastName, email, number, saved } =
 			this.state.currentIntroduction;
 		const { id, schoolName, startTime, gradTime, subject, eduSaved } =
@@ -273,7 +337,6 @@ class App extends React.Component {
 		const idP = this.state.currentProfession.id;
 		const startTimeP = this.state.currentProfession.startTime;
 		const savedP = this.state.currentProfession.saved;
-		const submitted = this.state.submitted;
 		return (
 			<div className='App'>
 				<Header />
@@ -285,6 +348,7 @@ class App extends React.Component {
 					saved={saved}
 					inputHandler={this.handleIntroInput}
 					toggleSave={this.handleIntroButton}
+					complete={this.state.submitted}
 				/>
 				<section className='education-list'>
 					<h1>Educational Experience</h1>
@@ -299,6 +363,7 @@ class App extends React.Component {
 						inputHandler={this.handleEducationInput}
 						toggleSave={this.handleAddingEducation}
 						delete={this.deleteEducation}
+						complete={this.state.submitted}
 					/>
 				</section>
 				<section className='profession-list'>
@@ -315,6 +380,7 @@ class App extends React.Component {
 						inputHandler={this.handleProfessionInput}
 						toggleSave={this.handleAddingProfession}
 						delete={this.deleteProfession}
+						complete={this.state.submitted}
 					/>
 				</section>
 				<button className='generate-button' onClick={this.toggleSubmit}>
@@ -322,6 +388,12 @@ class App extends React.Component {
 				</button>
 			</div>
 		);
+	}
+
+	render() {
+		return this.state.submitted
+			? this.returnComplete()
+			: this.returnIncomplete();
 	}
 }
 

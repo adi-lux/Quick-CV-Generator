@@ -6,6 +6,7 @@ class Education extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.toggleMode = this.toggleMode.bind(this);
 		this.deleteItem = this.deleteItem.bind(this);
+		this.returnCompleted = this.returnCompleted.bind(this);
 	}
 
 	handleChange(e) {
@@ -94,10 +95,26 @@ class Education extends React.Component {
 		);
 	}
 
-	render() {
-		const { saved } = this.props;
+	returnCompleted() {
+		const { schoolName, startTime, gradTime, subject } = this.props;
+		return (
+			<div className='complete-education'>
+				<h1 className='complete-school'>{schoolName}</h1>
+				<h2 className='timespan'>
+					{startTime} - {gradTime}
+				</h2>
+				<h3 className='subject'>{subject}</h3>
+			</div>
+		);
+	}
 
-		return saved ? this.returnSaved() : this.returnUnsaved();
+	render() {
+		const { saved, complete } = this.props;
+		return complete
+			? this.returnCompleted()
+			: saved
+			? this.returnSaved()
+			: this.returnUnsaved();
 	}
 }
 
