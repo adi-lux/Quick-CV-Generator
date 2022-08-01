@@ -76,16 +76,15 @@ class Introduction extends React.Component {
 
 		return (
 			<section className='introduction'>
-				
 				<label htmlFor='first-name'>First Name</label>
-				<p id='firstName'>{firstName}</p>
+				<input id='firstName' value={firstName} disabled readonly />
 				<label htmlFor='last-name'>Last Name</label>
 
-				<p id='lastName'>{lastName}</p>
+				<input id='lastName' value={lastName} disabled readonly />
 				<label htmlFor='email'>Email</label>
-				<p id='email'>{email}</p>
+				<input id='email' value={email} disabled readonly />
 				<label htmlFor='number'>Phone Number</label>
-				<p id='number'>{number}</p>
+				<input id='number' value={number} disabled readonly />
 				<input
 					type='button'
 					name='saved'

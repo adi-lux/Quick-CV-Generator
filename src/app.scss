@@ -16,22 +16,24 @@ body {
 header {
 	text-align: center;
 }
+.App {
+	display: grid;
+}
+.education-list,
+.profession-list {
+	display: grid;
+	row-gap: 1vh;
+}
 
-.education-list {
-	.education-part {
-		display: grid;
-		row-gap: 1vh;
-	}
-	h1 {
-		text-align: center;
-	}
+h1 {
+	width: 100%;
+	text-align: center;
 }
 .introduction,
 .education {
 	padding: 0 20vw;
 	display: grid;
 	grid-template-columns: 110px 1fr;
-	grid-template-rows: repeat(5, 1fr);
 	row-gap: 1vh;
 	align-items: center;
 
@@ -46,6 +48,38 @@ header {
 	#saved,
 	.education-button {
 		justify-self: stretch;
+		grid-column: 1 / 3;
+	}
+	.button-wrapper {
+		grid-column: 1 / 3;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		justify-content: stretch;
+	}
+}
+
+.profession {
+	padding: 0 20vw;
+	display: grid;
+	gap: 1vh;
+	grid-template-columns: 110px 1fr;
+	align-items: center;
+	label {
+		font-weight: bold;
+	}
+	p,
+	input {
+		margin: 0;
+		padding: 0;
+	}
+
+	.button-wrapper {
+		grid-column: 1 / 3;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		justify-content: stretch;
+	}
+	.profession-button {
 		grid-column: 1 / 3;
 	}
 }

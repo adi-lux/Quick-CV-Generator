@@ -1,6 +1,5 @@
 import React from 'react';
 import { v4 as uuid } from 'uuid';
-import Button from './components/Button';
 import Education from './components/Education';
 import Header from './components/Header';
 import Profession from './components/Profession';
@@ -38,14 +37,19 @@ class App extends React.Component {
 			},
 			educationList: [],
 			professionList: [],
+			submitted: false,
 		};
 
 		this.handleIntroButton = this.handleIntroButton.bind(this);
 		this.handleIntroInput = this.handleIntroInput.bind(this);
+		this.handleEducation = this.handleEducation.bind(this);
 		this.handleEducationInput = this.handleEducationInput.bind(this);
 		this.handleAddingEducation = this.handleAddingEducation.bind(this);
-		this.handleEditingEducation = this.handleEditingEducation.bind(this);
-		this.editEducation = this.editEducation.bind(this);
+		this.deleteEducation = this.deleteEducation.bind(this);
+		this.handleAddingProfession = this.handleAddingProfession.bind(this);
+		this.handleProfession = this.handleProfession.bind(this);
+		this.handleProfessionInput = this.handleProfessionInput.bind(this);
+		this.deleteProfession = this.deleteProfession.bind(this);
 	}
 
 	handleIntroButton(e) {
@@ -71,143 +75,8 @@ class App extends React.Component {
 		});
 	}
 
-	handleEducationInput(e) {
+	handleEducation(e, mode) {
 		e.preventDefault();
-		const currInput = this.state.currentEducation;
-		const form = e.target.form.elements;
-
-		const [idE, schoolNameE, subjectE, startTimeE, gradTimeE] = form;
-		const [id, schoolName, subject, startTime, gradTime] = [
-			idE.value,
-			schoolNameE.value,
-			subjectE.value,
-			startTimeE.value,
-			gradTimeE.value,
-		];
-		const check = this.state.educationList.filter((item) => item.key === id);
-
-		if (check.length > 0) {
-			const eduList = this.state.educationList.map((item) => {
-				if (item.key === id) {
-					return (
-						<Education
-							key={id}
-							id={id}
-							schoolName={schoolName}
-							subject={subject}
-							startTime={startTime}
-							gradTime={gradTime}
-							saved={false}
-							toggleSave={this.handleAddingEducation}
-							inputHandler={this.handleEducationInput}
-							editHandler={this.editEducation}
-						/>
-					);
-				} else {
-					return item;
-				}
-			});
-			this.setState({
-				...this.state,
-				educationList: eduList,
-			});
-		} else {
-			this.setState({
-				...this.state,
-				currentEducation: {
-					...currInput,
-					[e.target.name]: e.target.value,
-				},
-			});
-		}
-	}
-
-	handleEditingEducation(e) {
-		const form = e.target.form.elements;
-
-		const [idE, schoolNameE, subjectE, startTimeE, gradTimeE] = form;
-		const [id, schoolName, subject, startTime, gradTime] = [
-			idE.value,
-			schoolNameE.value,
-			subjectE.value,
-			startTimeE.value,
-			gradTimeE.value,
-		];
-		const check = this.state.educationList.filter((item) => item.key === id);
-		console.log(check);
-		if (check.length > 0) {
-			const eduList = this.state.educationList.map((item) => {
-				if (item.key === id) {
-					return (
-						<Education
-							key={id}
-							id={id}
-							schoolName={schoolName}
-							subject={subject}
-							startTime={startTime}
-							gradTime={gradTime}
-							saved={true}
-							toggleSave={this.handleAddingEducation}
-							inputHandler={this.handleEducationInput}
-							editHandler={this.editEducation}
-						/>
-					);
-				} else {
-					return item;
-				}
-			});
-
-			this.setState({
-				...this.state,
-				educationList: eduList,
-			});
-		}
-	}
-
-	editEducation(e) {
-		// filter the element that has the id
-		const form = e.target.form.elements;
-
-		const [idE, schoolNameE, subjectE, startTimeE, gradTimeE] = form;
-		const [id, schoolName, subject, startTime, gradTime] = [
-			idE.value,
-			schoolNameE.value,
-			subjectE.value,
-			startTimeE.value,
-			gradTimeE.value,
-		];
-		const check = this.state.educationList.filter((item) => item.key === id);
-		if (check.length > 0) {
-			const eduList = this.state.educationList.map((item) => {
-				if (item.key === id) {
-					return (
-						<Education
-							key={id}
-							id={id}
-							schoolName={schoolName}
-							subject={subject}
-							startTime={startTime}
-							gradTime={gradTime}
-							saved={false}
-							toggleSave={this.handleAddingEducation}
-							inputHandler={this.handleEducationInput}
-							editHandler={this.editEducation}
-						/>
-					);
-				} else {
-					return item;
-				}
-			});
-
-			this.setState({
-				...this.state,
-				educationList: eduList,
-			});
-		}
-	}
-	handleAddingEducation(e) {
-		e.preventDefault();
-		const currState = this.state;
 
 		const form = e.target.form.elements;
 		const [idE, schoolNameE, subjectE, startTimeE, gradTimeE] = form;
@@ -229,30 +98,51 @@ class App extends React.Component {
 				gradTime={gradTime}
 				inputHandler={this.handleEducationInput}
 				toggleSave={this.handleAddingEducation}
-				saved={true}
-				editHandler={this.editEducation}
+				saved={mode}
+				delete={this.deleteEducation}
 			/>
 		);
 
 		const check = this.state.educationList.filter((item) => item.key === id);
-		console.log(id, check);
+
 		if (check.length > 0) {
 			const eduList = this.state.educationList.map((item) => {
-				if (item.key === id) {
+				if (item.key === newEducation.key) {
 					return newEducation;
 				} else {
 					return item;
 				}
 			});
-			console.log(eduList);
 
 			this.setState({
-				...currState,
+				...this.state.currentEducation,
 				educationList: eduList,
 			});
-		} else {
+			return { existing: true, newEducation };
+		}
+		return { existing: false, newEducation };
+	}
+
+	handleEducationInput(e) {
+		const { existing } = this.handleEducation(e, false);
+
+		if (!existing) {
 			this.setState({
-				...currState,
+				...this.state,
+				currentEducation: {
+					...this.state.currentEducation,
+					[e.target.name]: e.target.value,
+				},
+			});
+		}
+	}
+
+	handleAddingEducation(e) {
+		const { existing, newEducation } = this.handleEducation(e, true);
+
+		if (!existing) {
+			this.setState({
+				...this.state,
 				currentEducation: {
 					id: uuid(),
 					schoolName: '',
@@ -266,6 +156,111 @@ class App extends React.Component {
 		}
 	}
 
+	deleteEducation(id) {
+		this.setState({
+			...this.state,
+			educationList: this.state.educationList.filter((edu) => edu.key !== id),
+		});
+	}
+
+	handleProfession(e, mode) {
+		e.preventDefault();
+
+		const form = e.target.form.elements;
+		const [idE, companyE, titleE, startTimeE, endTimeE, descriptionE] = form;
+		const [id, company, title, startTime, endTime, description] = [
+			idE.value,
+			companyE.value,
+			titleE.value,
+			startTimeE.value,
+			endTimeE.value,
+			descriptionE.value,
+		];
+
+		const newProfession = (
+			<Profession
+				key={id}
+				id={id}
+				company={company}
+				title={title}
+				description={description}
+				startTime={startTime}
+				endTime={endTime}
+				inputHandler={this.handleProfessionInput}
+				toggleSave={this.handleAddingProfession}
+				saved={mode}
+				delete={this.deleteProfession}
+			/>
+		);
+
+		const check = this.state.professionList.filter((item) => item.key === id);
+
+		if (check.length > 0) {
+			const profList = this.state.professionList.map((item) => {
+				if (item.key === newProfession.key) {
+					return newProfession;
+				} else {
+					return item;
+				}
+			});
+
+			this.setState({
+				...this.state.currentProfession,
+				professionList: profList,
+			});
+			return { existing: true, newProfession };
+		}
+		return { existing: false, newProfession };
+	}
+
+	handleProfessionInput(e) {
+		const { existing } = this.handleProfession(e, false);
+		if (!existing) {
+			this.setState({
+				...this.state,
+				currentProfession: {
+					...this.state.currentProfession,
+					[e.target.name]: e.target.value,
+				},
+			});
+		}
+	}
+
+	handleAddingProfession(e) {
+		const { existing, newProfession } = this.handleProfession(e, true);
+
+		if (!existing) {
+			this.setState({
+				...this.state,
+				currentProfession: {
+					id: uuid(),
+					company: '',
+					title: '',
+					description: '',
+					startTime: '',
+					endTime: '',
+					saved: false,
+				},
+				professionList: this.state.professionList.concat(newProfession),
+			});
+		}
+	}
+
+	deleteProfession(id) {
+		this.setState({
+			...this.state,
+			professionList: this.state.professionList.filter(
+				(prof) => prof.key !== id
+			),
+		});
+	}
+
+	toggleSubmit() {}
+
+	returnComplete() {}
+
+	returnIncomplete() {}
+
 	render() {
 		const { firstName, lastName, email, number, saved } =
 			this.state.currentIntroduction;
@@ -273,6 +268,12 @@ class App extends React.Component {
 			this.state.currentEducation;
 		const { educationList, professionList } = this.state;
 
+		const { company, title, description, endTime } =
+			this.state.currentProfession;
+		const idP = this.state.currentProfession.id;
+		const startTimeP = this.state.currentProfession.startTime;
+		const savedP = this.state.currentProfession.saved;
+		const submitted = this.state.submitted;
 		return (
 			<div className='App'>
 				<Header />
@@ -287,24 +288,38 @@ class App extends React.Component {
 				/>
 				<section className='education-list'>
 					<h1>Educational Experience</h1>
-
-					<div className='education-part'>
-						{educationList}
-						<Education
-							id={id}
-							schoolName={schoolName}
-							startTime={startTime}
-							gradTime={gradTime}
-							subject={subject}
-							saved={eduSaved}
-							inputHandler={this.handleEducationInput}
-							toggleSave={this.handleAddingEducation}
-							editHandler={this.editEducation}
-						/>
-					</div>
+					{educationList}
+					<Education
+						id={id}
+						schoolName={schoolName}
+						startTime={startTime}
+						gradTime={gradTime}
+						subject={subject}
+						saved={eduSaved}
+						inputHandler={this.handleEducationInput}
+						toggleSave={this.handleAddingEducation}
+						delete={this.deleteEducation}
+					/>
 				</section>
-				<Profession />
-				<Button />
+				<section className='profession-list'>
+					<h1>Professional Experience</h1>
+					{professionList}
+					<Profession
+						id={idP}
+						company={company}
+						title={title}
+						startTime={startTimeP}
+						description={description}
+						endTime={endTime}
+						saved={savedP}
+						inputHandler={this.handleProfessionInput}
+						toggleSave={this.handleAddingProfession}
+						delete={this.deleteProfession}
+					/>
+				</section>
+				<button className='generate-button' onClick={this.toggleSubmit}>
+					Generate
+				</button>
 			</div>
 		);
 	}

@@ -5,16 +5,8 @@ class Education extends React.Component {
 		super(props);
 		this.handleChange = this.handleChange.bind(this);
 		this.toggleMode = this.toggleMode.bind(this);
-		this.editItem = this.editItem.bind(this);
+		this.deleteItem = this.deleteItem.bind(this);
 	}
-	// currentEducation: {
-	// 	id: uuid(),
-	// 	schoolName: '',
-	// 	startTime: '',
-	// 	gradTime: '',
-	// 	subject: '',
-	// 	saved: false,
-	// },
 
 	handleChange(e) {
 		this.props.inputHandler(e);
@@ -24,29 +16,37 @@ class Education extends React.Component {
 		this.props.toggleSave(e);
 	}
 
-	editItem(e) {
-		this.props.editHandler(e);
+	deleteItem() {
+		this.props.delete(this.props.id);
 	}
 
 	returnSaved() {
 		const { id, schoolName, startTime, gradTime, subject } = this.props;
 		return (
-			<form className='education'>
-				<input type='hidden' value={id} readOnly disabled />
+			<form className='education' readOnly>
+				<input type='hidden' value={id} disabled />
 				<label>School Name</label>
-				<input name='schoolName' value={schoolName} disabled readOnly />
+				<input name='schoolName' value={schoolName} disabled />
 				<label>Subject</label>
-				<input value={subject} disabled readOnly />
+				<input value={subject} disabled />
 				<label>Start Date</label>
-				<input value={startTime} disabled readOnly />
+				<input value={startTime} disabled />
 				<label>End Date</label>
-				<input value={gradTime} disabled readOnly />
-				<input
-					type='button'
-					className='education-button'
-					value='Edit Experience'
-					onClick={this.handleChange}
-				/>
+				<input value={gradTime} disabled />
+				<div className='button-wrapper'>
+					<input
+						type='button'
+						className='save-education-button'
+						value='Edit'
+						onClick={this.handleChange}
+					/>
+					<input
+						type='button'
+						value='Delete'
+						className='delete-education'
+						onClick={this.deleteItem}
+					/>
+				</div>
 			</form>
 		);
 	}
@@ -63,21 +63,21 @@ class Education extends React.Component {
 					value={schoolName}
 					onChange={this.handleChange}
 				/>
-				<label htmlFor={'subject-' + id}>Subject</label>
+				<label>Subject</label>
 				<input
 					type='text'
 					name='subject'
 					value={subject}
 					onChange={this.handleChange}
 				/>
-				<label htmlFor={'startTime-' + id}>Start Date</label>
+				<label>Start Date</label>
 				<input
 					type='date'
 					name='startTime'
 					value={startTime}
 					onChange={this.handleChange}
 				/>
-				<label htmlFor={'gradTime-' + id}>End Date</label>
+				<label>End Date</label>
 				<input
 					type='date'
 					name='gradTime'
@@ -86,7 +86,7 @@ class Education extends React.Component {
 				/>
 				<input
 					type='button'
-					value='Add Experience'
+					value='Save'
 					className='education-button'
 					onClick={this.toggleMode}
 				/>
