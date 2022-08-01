@@ -1,31 +1,18 @@
 import React from 'react';
 
-class Introduction extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleChange = this.handleChange.bind(this);
-		this.toggleMode = this.toggleMode.bind(this);
-		this.returnUnsaved = this.returnUnsaved.bind(this);
-		this.returnSaved = this.returnSaved.bind(this);
-	}
-	// conditional rendering -> if saved or not, input vs paragraph
-	// 		firstName: '',
-	// 		lastName: '',
-	// 		email: '',
-	// 		number: '',
-	// 		saved: false,
+const Introduction = (props) => {
+	const {
+		saved,
+		complete,
+		firstName,
+		lastName,
+		email,
+		number,
+		inputHandler,
+		toggleSave,
+	} = props;
 
-	handleChange(e) {
-		this.props.inputHandler(e);
-	}
-
-	toggleMode(e) {
-		this.props.toggleSave(e);
-	}
-
-	returnUnsaved() {
-		const { firstName, lastName, email, number } = this.props;
-
+	const returnUnsaved = () => {
 		return (
 			<section className='introduction'>
 				<label htmlFor='first-name'>First Name</label>
@@ -33,7 +20,7 @@ class Introduction extends React.Component {
 					type='text'
 					name='first-name'
 					id='firstName'
-					onChange={this.handleChange}
+					onChange={inputHandler}
 					value={firstName}
 				/>
 				<label htmlFor='last-name'>Last Name</label>
@@ -42,7 +29,7 @@ class Introduction extends React.Component {
 					type='text'
 					name='last-name'
 					id='lastName'
-					onChange={this.handleChange}
+					onChange={inputHandler}
 					value={lastName}
 				/>
 				<label htmlFor='email'>Email</label>
@@ -50,7 +37,7 @@ class Introduction extends React.Component {
 					type='email'
 					name='email'
 					id='email'
-					onChange={this.handleChange}
+					onChange={inputHandler}
 					value={email}
 				/>
 				<label htmlFor='number'>Phone Number</label>
@@ -59,23 +46,21 @@ class Introduction extends React.Component {
 					type='number'
 					name='number'
 					id='number'
-					onChange={this.handleChange}
+					onChange={inputHandler}
 					value={number}
 				/>
 				<input
 					type='button'
 					name='saved'
 					id='saved'
-					onClick={this.toggleMode}
+					onClick={inputHandler}
 					value='Save'
 				/>
 			</section>
 		);
-	}
+	};
 
-	returnSaved() {
-		const { firstName, lastName, email, number } = this.props;
-
+	const returnSaved = () => {
 		return (
 			<section className='introduction'>
 				<label htmlFor='first-name'>First Name</label>
@@ -91,29 +76,27 @@ class Introduction extends React.Component {
 					type='button'
 					name='saved'
 					id='saved'
-					onClick={this.toggleMode}
+					onClick={toggleSave}
 					value='Edit'
 				/>
 			</section>
 		);
-	}
-	returnCompleted() {
-		const { firstName, lastName, email, number } = this.props;
+	};
+
+	const returnCompleted = () => {
 		return (
 			<div className='complete-introduction'>
-				<h1 className='complete-name'>{firstName} {lastName}</h1>
-				<h2 className='complete-info'>{email} | {number}</h2>
+				<h1 className='complete-name'>
+					{firstName} {lastName}
+				</h1>
+				<h2 className='complete-info'>
+					{email} | {number}
+				</h2>
 			</div>
 		);
-	}
-	render() {
-		const { saved, complete } = this.props;
-		return complete
-			? this.returnCompleted()
-			: saved
-			? this.returnSaved()
-			: this.returnUnsaved();
-	}
-}
+	};
+
+	return complete ? returnCompleted() : saved ? returnSaved() : returnUnsaved();
+};
 
 export default Introduction;

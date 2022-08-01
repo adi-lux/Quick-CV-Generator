@@ -1,28 +1,20 @@
 import React from 'react';
 
-class Education extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleChange = this.handleChange.bind(this);
-		this.toggleMode = this.toggleMode.bind(this);
-		this.deleteItem = this.deleteItem.bind(this);
-		this.returnCompleted = this.returnCompleted.bind(this);
-	}
+const Education = (props) => {
+	const {
+		id,
+		schoolName,
+		startTime,
+		gradTime,
+		subject,
+		inputHandler,
+		toggleSave,
+		deleted,
+		saved,
+		complete,
+	} = props;
 
-	handleChange(e) {
-		this.props.inputHandler(e);
-	}
-
-	toggleMode(e) {
-		this.props.toggleSave(e);
-	}
-
-	deleteItem() {
-		this.props.delete(this.props.id);
-	}
-
-	returnSaved() {
-		const { id, schoolName, startTime, gradTime, subject } = this.props;
+	const returnSaved = () => {
 		return (
 			<form className='education' readOnly>
 				<input type='hidden' value={id} disabled />
@@ -39,21 +31,20 @@ class Education extends React.Component {
 						type='button'
 						className='save-education-button'
 						value='Edit'
-						onClick={this.handleChange}
+						onClick={toggleSave}
 					/>
 					<input
 						type='button'
 						value='Delete'
 						className='delete-education'
-						onClick={this.deleteItem}
+						onClick={deleted}
 					/>
 				</div>
 			</form>
 		);
-	}
+	};
 
-	returnUnsaved() {
-		const { id, schoolName, startTime, gradTime, subject } = this.props;
+	const returnUnsaved = () => {
 		return (
 			<form className='education'>
 				<input type='hidden' value={id} />
@@ -62,41 +53,40 @@ class Education extends React.Component {
 					type='text'
 					name='schoolName'
 					value={schoolName}
-					onChange={this.handleChange}
+					onChange={inputHandler}
 				/>
 				<label>Subject</label>
 				<input
 					type='text'
 					name='subject'
 					value={subject}
-					onChange={this.handleChange}
+					onChange={inputHandler}
 				/>
 				<label>Start Date</label>
 				<input
 					type='date'
 					name='startTime'
 					value={startTime}
-					onChange={this.handleChange}
+					onChange={inputHandler}
 				/>
 				<label>End Date</label>
 				<input
 					type='date'
 					name='gradTime'
 					value={gradTime}
-					onChange={this.handleChange}
+					onChange={inputHandler}
 				/>
 				<input
 					type='button'
 					value='Save'
 					className='education-button'
-					onClick={this.toggleMode}
+					onChange={inputHandler}
 				/>
 			</form>
 		);
-	}
+	};
 
-	returnCompleted() {
-		const { schoolName, startTime, gradTime, subject } = this.props;
+	const returnCompleted = () => {
 		return (
 			<div className='complete-education'>
 				<h1 className='complete-school'>{schoolName}</h1>
@@ -106,16 +96,9 @@ class Education extends React.Component {
 				<h3 className='subject'>{subject}</h3>
 			</div>
 		);
-	}
+	};
 
-	render() {
-		const { saved, complete } = this.props;
-		return complete
-			? this.returnCompleted()
-			: saved
-			? this.returnSaved()
-			: this.returnUnsaved();
-	}
-}
+	return complete ? returnCompleted() : saved ? returnSaved() : returnUnsaved();
+};
 
 export default Education;

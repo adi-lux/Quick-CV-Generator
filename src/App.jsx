@@ -102,7 +102,7 @@ class App extends React.Component {
 				inputHandler={this.handleEducationInput}
 				toggleSave={this.handleAddingEducation}
 				saved={mode}
-				delete={this.deleteEducation}
+				deleted={this.deleteEducation}
 				complete={this.state.submitted}
 			/>
 		);
@@ -193,7 +193,7 @@ class App extends React.Component {
 				inputHandler={this.handleProfessionInput}
 				toggleSave={this.handleAddingProfession}
 				saved={mode}
-				delete={this.deleteProfession}
+				deleted={this.deleteProfession}
 				complete={this.state.submitted}
 			/>
 		);
@@ -312,12 +312,8 @@ class App extends React.Component {
 					saved={saved}
 					complete={this.state.submitted}
 				/>
-				<section className='education-list'>
-					{completeEducation}
-				</section>
-				<section className='profession-list'>
-					{completeProfession}
-				</section>
+				<section className='education-list'>{completeEducation}</section>
+				<section className='profession-list'>{completeProfession}</section>
 				<button className='generate-button' onClick={this.toggleSubmit}>
 					Previous
 				</button>
@@ -362,7 +358,7 @@ class App extends React.Component {
 						saved={eduSaved}
 						inputHandler={this.handleEducationInput}
 						toggleSave={this.handleAddingEducation}
-						delete={this.deleteEducation}
+						deleted={this.deleteEducation}
 						complete={this.state.submitted}
 					/>
 				</section>
@@ -379,7 +375,7 @@ class App extends React.Component {
 						saved={savedP}
 						inputHandler={this.handleProfessionInput}
 						toggleSave={this.handleAddingProfession}
-						delete={this.deleteProfession}
+						deleted={this.deleteProfession}
 						complete={this.state.submitted}
 					/>
 				</section>

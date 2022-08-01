@@ -1,28 +1,21 @@
 import React from 'react';
 
-class Profession extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleChange = this.handleChange.bind(this);
-		this.toggleMode = this.toggleMode.bind(this);
-		this.deleteItem = this.deleteItem.bind(this);
-		this.returnCompleted = this.returnCompleted.bind(this);
-	}
+const Profession = (props) => {
+	const {
+		id,
+		company,
+		title,
+		description,
+		startTime,
+		endTime,
+		toggleSave,
+		inputHandler,
+		saved,
+		complete,
+		deleted,
+	} = props;
 
-	handleChange(e) {
-		this.props.inputHandler(e);
-	}
-
-	toggleMode(e) {
-		this.props.toggleSave(e);
-	}
-
-	deleteItem() {
-		this.props.delete(this.props.id);
-	}
-
-	returnSaved() {
-		const { id, company, title, description, startTime, endTime } = this.props;
+	const returnSaved = () => {
 		return (
 			<form className='profession' readOnly>
 				<input type='hidden' value={id} disabled />
@@ -41,21 +34,20 @@ class Profession extends React.Component {
 						type='button'
 						className='save-profession-button'
 						value='Edit'
-						onClick={this.handleChange}
+						onClick={toggleSave}
 					/>
 					<input
 						type='button'
 						value='Delete'
 						className='delete-profession'
-						onClick={this.deleteItem}
+						onClick={deleted}
 					/>
 				</div>
 			</form>
 		);
-	}
+	};
 
-	returnUnsaved() {
-		const { id, company, title, description, startTime, endTime } = this.props;
+	const returnUnsaved = () => {
 		return (
 			<form className='profession'>
 				<input type='hidden' value={id} />
@@ -64,47 +56,41 @@ class Profession extends React.Component {
 					name='company'
 					type='text'
 					value={company}
-					onChange={this.handleChange}
+					onChange={inputHandler}
 				/>
 				<label>Title</label>
-				<input
-					name='title'
-					type='text'
-					value={title}
-					onChange={this.handleChange}
-				/>
+				<input name='title' type='text' value={title} onChange={inputHandler} />
 
 				<label>Start Date</label>
 				<input
 					type='date'
 					name='startTime'
 					value={startTime}
-					onChange={this.handleChange}
+					onChange={inputHandler}
 				/>
 				<label>End Date</label>
 				<input
 					name='endTime'
 					type='date'
 					value={endTime}
-					onChange={this.handleChange}
+					onChange={inputHandler}
 				/>
 				<label>Description</label>
 				<textarea
 					name='description'
 					value={description}
-					onChange={this.handleChange}
+					onChange={inputHandler}
 				/>
 				<input
 					type='button'
 					className='profession-button'
 					value='Save'
-					onClick={this.toggleMode}
+					onClick={toggleSave}
 				/>
 			</form>
 		);
-	}
-	returnCompleted() {
-		const { company, title, description, startTime, endTime } = this.props;
+	};
+	const returnCompleted = () => {
 		return (
 			<div className='complete-profession'>
 				<h1 className='complete-company'>{company}</h1>
@@ -115,15 +101,9 @@ class Profession extends React.Component {
 				<p className='description'>{description}</p>
 			</div>
 		);
-	}
-	render() {
-		const { saved, complete } = this.props;
-		return complete
-			? this.returnCompleted()
-			: saved
-			? this.returnSaved()
-			: this.returnUnsaved();
-	}
-}
+	};
+
+	return complete ? returnCompleted() : saved ? returnSaved() : returnUnsaved();
+};
 
 export default Profession;
